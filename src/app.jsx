@@ -514,7 +514,7 @@ class Application extends React.Component {
     }
 
     checkUserService() {
-        const argv = ["systemctl", "--user", "is-enabled", "podman.socket"];
+        const argv = ["systemctl", "--user", "is-enabled", "docker.socket"];
 
         cockpit.spawn(argv, { environ: ["LC_ALL=C"], err: "out" })
                 .then(() => this.setState({ userServiceExists: true }))
@@ -532,9 +532,9 @@ class Application extends React.Component {
 
         let argv;
         if (this.state.enableService)
-            argv = ["systemctl", "enable", "--now", "podman.socket"];
+            argv = ["systemctl", "enable", "--now", "docker.socket"];
         else
-            argv = ["systemctl", "start", "podman.socket"];
+            argv = ["systemctl", "start", "docker.socket"];
 
         cockpit.spawn(argv, { superuser: "require", err: "message" })
                 .then(() => this.init(true))
@@ -544,13 +544,13 @@ class Application extends React.Component {
                         systemContainersLoaded: true,
                         systemImagesLoaded: true
                     });
-                    console.warn("Failed to start system podman.socket:", JSON.stringify(err));
+                    console.warn("Failed to start system docker.socket:", JSON.stringify(err));
                 });
 
         if (this.state.enableService)
-            argv = ["systemctl", "--user", "enable", "--now", "podman.socket"];
+            argv = ["systemctl", "--user", "enable", "--now", "docker.socket"];
         else
-            argv = ["systemctl", "--user", "start", "podman.socket"];
+            argv = ["systemctl", "--user", "start", "docker.socket"];
 
         cockpit.spawn(argv, { err: "message" })
                 .then(() => this.init(false))
@@ -561,14 +561,14 @@ class Application extends React.Component {
                         userPodsLoaded: true,
                         userImagesLoaded: true
                     });
-                    console.warn("Failed to start user podman.socket:", JSON.stringify(err));
+                    console.warn("Failed to start user docker.socket:", JSON.stringify(err));
                 });
     }
 
     goToServicePage(e) {
         if (!e || e.button !== 0)
             return;
-        cockpit.jump("/system/services#/podman.socket");
+        cockpit.jump("/system/services#/docker.socket");
     }
 
     render() {

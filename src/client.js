@@ -1,6 +1,6 @@
 import rest from './rest.js';
 
-const PODMAN_SYSTEM_ADDRESS = "/run/podman/podman.sock";
+const PODMAN_SYSTEM_ADDRESS = "/var/run/docker.sock";
 export const VERSION = "/v1.12/";
 
 export function getAddress(system) {
@@ -8,7 +8,7 @@ export function getAddress(system) {
         return PODMAN_SYSTEM_ADDRESS;
     const xrd = sessionStorage.getItem('XDG_RUNTIME_DIR');
     if (xrd)
-        return (xrd + "/podman/podman.sock");
+        return (xrd + "/var/run/docker.sock");
     console.warn("$XDG_RUNTIME_DIR is not present. Cannot use user service.");
     return "";
 }
@@ -38,7 +38,7 @@ function podmanMonitor(name, method, args, callback, system) {
 
 export function streamEvents(system, callback) {
     return new Promise((resolve, reject) => {
-        podmanMonitor("libpod/events", "GET", {}, callback, system)
+        podmanMonitor("events", "GET", {}, callback, system)
                 .then(reply => resolve(JSON.parse(reply)))
                 .catch(reject);
     });
@@ -47,7 +47,7 @@ export function streamEvents(system, callback) {
 export function getInfo(system) {
     return new Promise((resolve, reject) => {
         const timeout = setTimeout(() => reject(new Error("timeout")), 5000);
-        podmanCall("libpod/info", "GET", {}, system)
+        podmanCall("info", "GET", {}, system)
                 .then(reply => resolve(JSON.parse(reply)))
                 .catch(reject)
                 .finally(() => clearTimeout(timeout));
@@ -60,7 +60,7 @@ export function getContainers(system, id) {
         if (id)
             options.filters = JSON.stringify({ id: [id] });
 
-        podmanCall("libpod/containers/json", "GET", options, system)
+        podmanCall("containers/json", "GET", options, system)
                 .then(reply => resolve(JSON.parse(reply)))
                 .catch(reject);
     });
@@ -71,7 +71,7 @@ export function getContainerStats(system, callback) {
         const options = {
             stream: true,
         };
-        podmanMonitor("libpod/containers/stats", "GET", options, callback, system)
+        podmanMonitor("containers/stats", "GET", options, callback, system)
                 .then(resolve, reject);
     });
 }
@@ -81,7 +81,7 @@ export function inspectContainer(system, id) {
         const options = {
             size: false // set true to display filesystem usage
         };
-        podmanCall("libpod/containers/" + id + "/json", "GET", options, system)
+        podmanCall("containers/" + id + "/json", "GET", options, system)
                 .then(reply => resolve(JSON.parse(reply)))
                 .catch(reject);
     });
@@ -92,7 +92,7 @@ export function delContainer(system, id, force) {
         const options = {
             force: force,
         };
-        podmanCall("libpod/containers/" + id, "DELETE", options, system)
+        podmanCall("containers/" + id, "DELETE", options, system)
                 .then(resolve)
                 .catch(reject);
     });
@@ -100,7 +100,7 @@ export function delContainer(system, id, force) {
 
 export function createContainer(system, config) {
     return new Promise((resolve, reject) => {
-        podmanCall("libpod/containers/create", "POST", {}, system, JSON.stringify(config))
+        podmanCall("containers/create", "POST", {}, system, JSON.stringify(config))
                 .then(reply => resolve(JSON.parse(reply)))
                 .catch(reject);
     });
@@ -108,7 +108,7 @@ export function createContainer(system, config) {
 
 export function commitContainer(system, commitData) {
     return new Promise((resolve, reject) => {
-        podmanCall("libpod/commit", "POST", commitData, system)
+        podmanCall("commit", "POST", commitData, system)
                 .then(resolve)
                 .catch(reject);
     });
@@ -116,7 +116,7 @@ export function commitContainer(system, commitData) {
 
 export function postContainer(system, action, id, args) {
     return new Promise((resolve, reject) => {
-        podmanCall("libpod/containers/" + id + "/" + action, "POST", args, system)
+        podmanCall("containers/" + id + "/" + action, "POST", args, system)
                 .then(resolve)
                 .catch(reject);
     });
@@ -151,7 +151,7 @@ export function execContainer(system, id) {
     };
 
     return new Promise((resolve, reject) => {
-        podmanCall("libpod/containers/" + id + "/exec", "POST", {}, system, JSON.stringify(args))
+        podmanCall("containers/" + id + "/exec", "POST", {}, system, JSON.stringify(args))
                 .then(reply => resolve(JSON.parse(reply)))
                 .catch(reject);
     });
@@ -168,7 +168,7 @@ export function resizeContainersTTY(system, id, exec, width, height) {
         point = "exec/";
 
     return new Promise((resolve, reject) => {
-        podmanCall("libpod/" + point + id + "/resize", "POST", args, system)
+        podmanCall(point + id + "/resize", "POST", args, system)
                 .then(resolve)
                 .catch(reject);
     });
@@ -192,7 +192,7 @@ export function getImages(system, id) {
         const options = {};
         if (id)
             options.filters = JSON.stringify({ id: [id] });
-        podmanCall("libpod/images/json", "GET", options, system)
+        podmanCall("images/json", "GET", options, system)
                 .then(reply => {
                     const immages = JSON.parse(reply);
                     const images = {};
@@ -246,7 +246,7 @@ export function untagImage(system, id, repo, tag) {
             repo: repo,
             tag: tag
         };
-        podmanCall("libpod/images/" + id + "/untag", "POST", options, system)
+        podmanCall("images/" + id + "/untag", "POST", options, system)
                 .then(resolve)
                 .catch(reject);
     });
@@ -257,7 +257,7 @@ export function pullImage(system, reference) {
         const options = {
             reference: reference,
         };
-        podmanCall("libpod/images/pull", "POST", options, system)
+        podmanCall("images/pull", "POST", options, system)
                 .then(r => {
                     // Need to check the last response if it contains error
                     const responses = r.trim().split("\n");
@@ -276,12 +276,12 @@ export function pullImage(system, reference) {
 
 export function pruneUnusedImages(system) {
     return new Promise((resolve, reject) => {
-        podmanCall("libpod/images/prune?all=true", "POST", {}, system).then(resolve)
+        podmanCall("images/prune?all=true", "POST", {}, system).then(resolve)
                 .then(reply => resolve(JSON.parse(reply)))
                 .catch(reject);
     });
 }
 
 export function imageExists(system, id) {
-    return podmanCall("libpod/images/" + id + "/exists", "GET", {}, system);
+    return podmanCall("images/" + id + "/exists", "GET", {}, system);
 }
