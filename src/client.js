@@ -45,15 +45,17 @@ export function getInfo(system) {
         const timeout = setTimeout(() => reject(new Error("timeout")), 5000);
         podmanCall("info", "GET", {}, system)
                 .then(reply => {
-                    const rawResp = resolve(JSON.parse(reply));
-                    rawResp.version = {
-                        Version: rawResp.ServerVersion
+                    const resp = resolve(JSON.parse(reply));
+                    resp.version = {
+                        Version: resp.ServerVersion
                     };
-                    rawResp.registries = rawResp.RegistryConfig.IndexConfigs;
-                    rawResp.host = {
-                        cgroupVersion: rawResp.CgroupVersion
+                    resp.registries = resp.RegistryConfig.IndexConfigs;
+                    resp.host = {
+                        cgroupVersion: resp.CgroupVersion
                     };
-                    return rawResp;
+                    resp.log("inside getInfo: ");
+                    resp.log(resp);
+                    return resp;
                 })
                 .catch(reject)
                 .finally(() => clearTimeout(timeout));
