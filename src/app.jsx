@@ -433,7 +433,7 @@ class Application extends React.Component {
     init(system) {
         client.getInfo(system)
                 .then(reply => {
-                    console.log("DF - reply:");
+                    console.log("DF1 - reply:");
                     console.log(reply);
                     this.setState({
                         [system ? "systemServiceAvailable" : "userServiceAvailable"]: true,
@@ -441,16 +441,24 @@ class Application extends React.Component {
                         registries: reply.registries,
                         cgroupVersion: reply.host.cgroupVersion,
                     });
+                    console.log("DF2 - after setState");
                     this.updateImagesAfterEvent(system);
+                    console.log("DF3 - after UpdateImages");
                     this.updateContainersAfterEvent(system, true);
+                    console.log("DF4 - after updateContainersAfterEvent");
                     this.updatePodsAfterEvent(system);
+                    console.log("DF5 - after updatePodsAfterEvent");
                     client.streamEvents(system,
-                                        message => this.handleEvent(message, system))
+                                        message => {
+                                            console.log("DF6 - in handleEvent");
+                                            this.handleEvent(message, system)
+                                        })
                             .then(() => {
                                 this.setState({ [system ? "systemServiceAvailable" : "userServiceAvailable"]: false });
                                 this.cleanupAfterService(system);
                             })
                             .catch(e => {
+                                console.log("DFe - streamEvents error");
                                 console.log(e);
                                 this.setState({ [system ? "systemServiceAvailable" : "userServiceAvailable"]: false });
                                 this.cleanupAfterService(system);
