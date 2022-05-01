@@ -15,8 +15,6 @@ function podmanCall(name, method, args, system, body) {
         params: args,
     };
 
-    console.log("getAddress = " + getAddress(system));
-
     return rest.call(getAddress(system), system, options);
 }
 
@@ -45,6 +43,7 @@ export function getInfo(system) {
         const timeout = setTimeout(() => reject(new Error("timeout")), 5000);
         podmanCall("info", "GET", {}, system)
                 .then(reply => {
+                    console.log("inside getInfo: ");
                     const resp = resolve(JSON.parse(reply));
                     resp.version = {
                         Version: resp.ServerVersion
@@ -53,8 +52,7 @@ export function getInfo(system) {
                     resp.host = {
                         cgroupVersion: resp.CgroupVersion
                     };
-                    resp.log("inside getInfo: ");
-                    resp.log(resp);
+                    console.log(resp);
                     return resp;
                 })
                 .catch(reject)
