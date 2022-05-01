@@ -8,7 +8,7 @@ export function getAddress(system) {
         return PODMAN_SYSTEM_ADDRESS;
     const xrd = sessionStorage.getItem('XDG_RUNTIME_DIR');
     if (xrd)
-        return (xrd + "/var/run/docker.sock");
+        return ("/var/run/docker.sock");
     console.warn("$XDG_RUNTIME_DIR is not present. Cannot use user service.");
     return "";
 }
