@@ -44,7 +44,7 @@ export function getInfo(system) {
         podmanCall("info", "GET", {}, system)
                 .then(reply => {
                     console.log("inside getInfo: ");
-                    const resp = resolve(JSON.parse(reply));
+                    const resp = JSON.parse(reply);
                     console.log("original resp:");
                     console.log(resp);
                     resp.version = {
@@ -60,7 +60,7 @@ export function getInfo(system) {
                     };
                     console.log("with host:");
                     console.log(resp);
-                    return resp;
+                    return resolve(resp);
                 })
                 .catch(reject)
                 .finally(() => clearTimeout(timeout));
