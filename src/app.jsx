@@ -433,6 +433,8 @@ class Application extends React.Component {
     init(system) {
         client.getInfo(system)
                 .then(reply => {
+                    console.log("DF - reply:");
+                    console.log(reply);
                     this.setState({
                         [system ? "systemServiceAvailable" : "userServiceAvailable"]: true,
                         version: reply.version.Version,
