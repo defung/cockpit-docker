@@ -45,7 +45,7 @@ export function getInfo(system) {
         const timeout = setTimeout(() => reject(new Error("timeout")), 5000);
         podmanCall("info", "GET", {}, system)
                 .then(reply => {
-                    let rawResp = resolve(JSON.parse(reply));
+                    const rawResp = resolve(JSON.parse(reply));
                     rawResp.version = {
                         Version: rawResp.ServerVersion
                     };
