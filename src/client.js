@@ -1,10 +1,10 @@
 import rest from './rest.js';
 
-const PODMAN_SYSTEM_ADDRESS = "/var/run/docker.sock";
+const DOCKER_SYSTEM_ADDRESS = "/var/run/docker.sock";
 export const VERSION = "/v1.12/";
 
 export function getAddress(system) {
-    return ("/var/run/docker.sock");
+    return (DOCKER_SYSTEM_ADDRESS);
 }
 
 function podmanCall(name, method, args, system, body) {
@@ -45,15 +45,15 @@ export function getInfo(system) {
         const timeout = setTimeout(() => reject(new Error("timeout")), 5000);
         podmanCall("info", "GET", {}, system)
                 .then(reply => {
-                    var rawResp = resolve(JSON.parse(reply));
+                    let rawResp = resolve(JSON.parse(reply));
                     rawResp.version = {
                         Version: rawResp.ServerVersion
-                    }
+                    };
                     rawResp.registries = rawResp.RegistryConfig.IndexConfigs;
                     rawResp.host = {
                         cgroupVersion: rawResp.CgroupVersion
-                    }
-                    rawResp
+                    };
+                    return rawResp;
                 })
                 .catch(reject)
                 .finally(() => clearTimeout(timeout));
