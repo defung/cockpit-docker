@@ -451,7 +451,7 @@ class Application extends React.Component {
                     client.streamEvents(system,
                                         message => {
                                             console.log("DF6 - in handleEvent");
-                                            this.handleEvent(message, system)
+                                            this.handleEvent(message, system);
                                         })
                             .then(() => {
                                 this.setState({ [system ? "systemServiceAvailable" : "userServiceAvailable"]: false });
