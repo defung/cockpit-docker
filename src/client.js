@@ -4,13 +4,7 @@ const PODMAN_SYSTEM_ADDRESS = "/var/run/docker.sock";
 export const VERSION = "/v1.12/";
 
 export function getAddress(system) {
-    if (system)
-        return PODMAN_SYSTEM_ADDRESS;
-    const xrd = sessionStorage.getItem('XDG_RUNTIME_DIR');
-    if (xrd)
-        return ("/var/run/docker.sock");
-    console.warn("$XDG_RUNTIME_DIR is not present. Cannot use user service.");
-    return "";
+    return ("/var/run/docker.sock");
 }
 
 function podmanCall(name, method, args, system, body) {
@@ -50,7 +44,17 @@ export function getInfo(system) {
     return new Promise((resolve, reject) => {
         const timeout = setTimeout(() => reject(new Error("timeout")), 5000);
         podmanCall("info", "GET", {}, system)
-                .then(reply => resolve(JSON.parse(reply)))
+                .then(reply => {
+                    var rawResp = resolve(JSON.parse(reply));
+                    rawResp.version = {
+                        Version: rawResp.ServerVersion
+                    }
+                    rawResp.registries = rawResp.RegistryConfig.IndexConfigs;
+                    rawResp.host = {
+                        cgroupVersion: rawResp.CgroupVersion
+                    }
+                    rawResp
+                })
                 .catch(reject)
                 .finally(() => clearTimeout(timeout));
     });
