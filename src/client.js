@@ -21,6 +21,8 @@ function podmanCall(name, method, args, system, body) {
         params: args,
     };
 
+    console.log("getAddress = " + getAddress(system));
+
     return rest.call(getAddress(system), system, options);
 }
 
