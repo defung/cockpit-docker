@@ -98,14 +98,14 @@ export function getDockerContainerStats(system, callback) {
     const process = cockpit.spawn(["docker", "stats", "--format", "'{{json .}}'"]);
     return new Promise((resolve, reject) => {
         process.stream(data => {
-                console.log("streaming...");
-                console.log(data);
-                callback(JSON.parse(data));
-            })
-            .catch((error, content) => {
-                manage_error(reject, error, content);
-            })
-            .then(resolve);
+            console.log("streaming...");
+            console.log(data);
+            callback(JSON.parse(data));
+        })
+        .catch((error, content) => {
+            manage_error(reject, error, content);
+        })
+        .then(resolve);
     });
 }
 
