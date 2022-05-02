@@ -142,7 +142,7 @@ class Application extends React.Component {
     // }
 
     updateContainerStats(system) {
-        const id = this.state.containers.slice(0, -5);
+        const id = Object.keys(this.state.containers)[0].slice(0, -5);
 
         client.getDockerContainerStats(system, id, reply => {
             if (reply.Error != null) // executed when container stop
