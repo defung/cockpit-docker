@@ -204,7 +204,7 @@ export function getImages(system, id) {
 
                     for (const image of immages || []) {
                         images[image.Id] = image;
-                        promises.push(podmanCall("libpod/images/" + image.Id + "/json", "GET", {}, system));
+                        promises.push(podmanCall("images/" + image.Id + "/json", "GET", {}, system));
                     }
 
                     Promise.all(promises)
@@ -238,7 +238,7 @@ export function delImage(system, id, force) {
         const options = {
             force: force,
         };
-        podmanCall("libpod/images/" + id, "DELETE", options, system)
+        podmanCall("images/" + id, "DELETE", options, system)
                 .then(reply => resolve(JSON.parse(reply)))
                 .catch(reject);
     });

@@ -59,8 +59,6 @@ function connect(address, system) {
 async function call (address, system, parameters) {
     const connection = connect(address, system);
     const result = await connection.call(parameters);
-    console.log("DFc - in call");
-    console.log(result);
     connection.close();
     return result;
 }
