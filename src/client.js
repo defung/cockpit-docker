@@ -1,4 +1,5 @@
 import rest from './rest.js';
+import cockpit from 'cockpit';
 
 const DOCKER_SYSTEM_ADDRESS = "/var/run/docker.sock";
 export const VERSION = "/v1.12/";
@@ -80,19 +81,31 @@ export function getContainerStats(system, callback) {
     });
 }
 
+function manage_error(reject, error, content) {
+    let content_o = {};
+    if (content) {
+        try {
+            content_o = JSON.parse(content);
+        } catch {
+            content_o.message = content;
+        }
+    }
+    const c = { ...error, ...content_o };
+    reject(c);
+}
+
 export function getDockerContainerStats(system, callback) {
     const process = cockpit.spawn(["docker", "stats", "--format", "'{{json .}}'"]);
-    
     return new Promise((resolve, reject) => {
         process.stream(data => {
-                    console.log("streaming...");
-                    console.log(data);
-                    callback(JSON.parse(data));
-                })
-                .catch((error, content) => {
-                    manage_error(reject, error, content);
-                })
-                .then(resolve);
+                console.log("streaming...");
+                console.log(data);
+                callback(JSON.parse(data));
+            })
+            .catch((error, content) => {
+                manage_error(reject, error, content);
+            })
+            .then(resolve);
     });
 }
 
