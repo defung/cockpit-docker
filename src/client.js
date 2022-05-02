@@ -80,6 +80,16 @@ export function getContainerStats(system, callback) {
     });
 }
 
+export function getDockerContainerStats(id, callback) {
+    return new Promise((resolve, reject) => {
+        const options = {
+            stream: true,
+        };
+        podmanMonitor("containers/" + id + "/stats", "GET", options, callback, system)
+                .then(resolve, reject);
+    });
+}
+
 export function inspectContainer(system, id) {
     return new Promise((resolve, reject) => {
         const options = {
