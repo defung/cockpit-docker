@@ -166,11 +166,11 @@ class Application extends React.Component {
                         console.log("DF container");
                         console.log(container);
                         this.isContainerCheckpointPresent(container.Id, system)
-                        .then(checkpointPresent => {
-                            const newContainer = Object.assign({}, container);
-                            newContainer.hasCheckpoint = checkpointPresent;
-                            return newContainer;
-                        })
+                                .then(checkpointPresent => {
+                                    const newContainer = Object.assign({}, container);
+                                    newContainer.hasCheckpoint = checkpointPresent;
+                                    return newContainer;
+                                });
                     })
                 ))
                 .then(reply => {
