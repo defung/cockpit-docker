@@ -165,7 +165,7 @@ class Application extends React.Component {
                     (reply || []).map(container => {
                         console.log("DF container");
                         console.log(container);
-                        this.isContainerCheckpointPresent(container.Id, system)
+                        return this.isContainerCheckpointPresent(container.Id, system)
                                 .then(checkpointPresent => {
                                     const newContainer = Object.assign({}, container);
                                     newContainer.hasCheckpoint = checkpointPresent;
