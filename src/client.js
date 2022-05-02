@@ -102,10 +102,10 @@ export function getDockerContainerStats(system, callback) {
             console.log(data);
             callback(JSON.parse(data));
         })
-        .catch((error, content) => {
-            manage_error(reject, error, content);
-        })
-        .then(resolve);
+                .catch((error, content) => {
+                    manage_error(reject, error, content);
+                })
+                .then(resolve);
     });
 }
 
