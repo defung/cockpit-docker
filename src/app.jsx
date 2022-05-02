@@ -142,13 +142,11 @@ class Application extends React.Component {
     // }
 
     updateContainerStats(system) {
-        const id = Object.keys(this.state.containers)[0].slice(0, -5);
-
-        client.getDockerContainerStats(system, id, reply => {
+        client.getDockerContainerStats(system, reply => {
             if (reply.Error != null) // executed when container stop
                 console.warn("Failed to update container stats:", JSON.stringify(reply.message));
             else {
-                this.updateState("containersStats", id + system.toString(), reply);
+                reply.Stats.forEach(stat => this.updateState("containersStats", stat.ContainerID + system.toString(), stat));
             }
         }).catch(ex => {
             if (ex.cause == "no support for CGroups V1 in rootless environments" || ex.cause == "Container stats resource only available for cgroup v2") {

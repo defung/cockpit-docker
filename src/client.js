@@ -80,13 +80,19 @@ export function getContainerStats(system, callback) {
     });
 }
 
-export function getDockerContainerStats(system, id, callback) {
+export function getDockerContainerStats(system, callback) {
+    const process = cockpit.spawn(["docker", "stats", "--format", "'{{json .}}'"]);
+    
     return new Promise((resolve, reject) => {
-        const options = {
-            stream: true,
-        };
-        podmanMonitor("containers/" + id + "/stats", "GET", options, callback, system)
-                .then(resolve, reject);
+        process.stream(data => {
+                    console.log("streaming...");
+                    console.log(data);
+                    callback(JSON.parse(data));
+                })
+                .catch((error, content) => {
+                    manage_error(reject, error, content);
+                })
+                .then(resolve);
     });
 }
 
