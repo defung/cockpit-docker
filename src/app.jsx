@@ -162,16 +162,20 @@ class Application extends React.Component {
     updateContainersAfterEvent(system, init) {
         client.getContainers(system)
                 .then(reply => Promise.all(
-                    (reply || []).map(container =>
+                    (reply || []).map(container => {
+                        console.log("DF container");
+                        console.log(container);
                         this.isContainerCheckpointPresent(container.Id, system)
-                                .then(checkpointPresent => {
-                                    const newContainer = Object.assign({}, container);
-                                    newContainer.hasCheckpoint = checkpointPresent;
-                                    return newContainer;
-                                })
-                    )
+                        .then(checkpointPresent => {
+                            const newContainer = Object.assign({}, container);
+                            newContainer.hasCheckpoint = checkpointPresent;
+                            return newContainer;
+                        })
+                    })
                 ))
                 .then(reply => {
+                    console.log("DF container 2");
+                    console.log(reply);
                     this.setState(prevState => {
                         // Copy only containers that could not be deleted with this event
                         // So when event from system come, only copy user containers and vice versa
@@ -444,8 +448,6 @@ class Application extends React.Component {
                     this.updatePodsAfterEvent(system);
                     client.streamEvents(system,
                                         message => {
-                                            console.log("DF6 - in handleEvent");
-                                            console.log(message);
                                             this.handleEvent(message, system);
                                         })
                             .then(() => {
