@@ -398,8 +398,11 @@ class Application extends React.Component {
             break;
         /* docker event types */
         case 'exec_die':
+            break;
         case event.Action.match(/^exec_start:/)?.input:
+            break;
         case event.Action.match(/^exec_create:/)?.input:
+            break;
         default:
             console.warn('Unhandled event type ', event.Type, event.Action);
         }
