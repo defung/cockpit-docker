@@ -80,7 +80,7 @@ export function getContainerStats(system, callback) {
     });
 }
 
-export function getDockerContainerStats(id, callback) {
+export function getDockerContainerStats(system, id, callback) {
     return new Promise((resolve, reject) => {
         const options = {
             stream: true,

@@ -142,22 +142,22 @@ class Application extends React.Component {
     // }
 
     updateContainerStats(system) {
-        Object.keys(state.containers)
-            .map(s => s.slice(0, -5))
-            .foreach(id => {
-                client.getDockerContainerStats(id, reply => {
-                    if (reply.Error != null) // executed when container stop
-                        console.warn("Failed to update container stats:", JSON.stringify(reply.message));
-                    else {
-                        this.updateState("containersStats", id + system.toString(), reply);
-                    }
-                }).catch(ex => {
-                    if (ex.cause == "no support for CGroups V1 in rootless environments" || ex.cause == "Container stats resource only available for cgroup v2") {
-                        console.log("This OS does not support CgroupsV2. Some information may be missing.");
-                    } else
-                        console.warn("Failed to update container stats:", JSON.stringify(ex.message));
+        Object.keys(this.state.containers)
+                .map(s => s.slice(0, -5))
+                .foreach(id => {
+                    client.getDockerContainerStats(system, id, reply => {
+                        if (reply.Error != null) // executed when container stop
+                            console.warn("Failed to update container stats:", JSON.stringify(reply.message));
+                        else {
+                            this.updateState("containersStats", id + system.toString(), reply);
+                        }
+                    }).catch(ex => {
+                        if (ex.cause == "no support for CGroups V1 in rootless environments" || ex.cause == "Container stats resource only available for cgroup v2") {
+                            console.log("This OS does not support CgroupsV2. Some information may be missing.");
+                        } else
+                            console.warn("Failed to update container stats:", JSON.stringify(ex.message));
+                    });
                 });
-            });
     }
 
     inspectContainerDetail(id, system) {
