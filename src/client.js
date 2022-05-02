@@ -43,23 +43,14 @@ export function getInfo(system) {
         const timeout = setTimeout(() => reject(new Error("timeout")), 5000);
         podmanCall("info", "GET", {}, system)
                 .then(reply => {
-                    console.log("inside getInfo: ");
                     const resp = JSON.parse(reply);
-                    console.log("original resp:");
-                    console.log(resp);
                     resp.version = {
                         Version: resp.ServerVersion
                     };
-                    console.log("with version:");
-                    console.log(resp);
                     resp.registries = resp.RegistryConfig.IndexConfigs;
-                    console.log("with registries:");
-                    console.log(resp);
                     resp.host = {
                         cgroupVersion: resp.CgroupVersion
                     };
-                    console.log("with host:");
-                    console.log(resp);
                     return resolve(resp);
                 })
                 .catch(reject)

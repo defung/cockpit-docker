@@ -433,24 +433,19 @@ class Application extends React.Component {
     init(system) {
         client.getInfo(system)
                 .then(reply => {
-                    console.log("DF1 - reply:");
-                    console.log(reply);
                     this.setState({
                         [system ? "systemServiceAvailable" : "userServiceAvailable"]: true,
                         version: reply.version.Version,
                         registries: reply.registries,
                         cgroupVersion: reply.host.cgroupVersion,
                     });
-                    console.log("DF2 - after setState");
                     this.updateImagesAfterEvent(system);
-                    console.log("DF3 - after UpdateImages");
                     this.updateContainersAfterEvent(system, true);
-                    console.log("DF4 - after updateContainersAfterEvent");
                     this.updatePodsAfterEvent(system);
-                    console.log("DF5 - after updatePodsAfterEvent");
                     client.streamEvents(system,
                                         message => {
                                             console.log("DF6 - in handleEvent");
+                                            console.log(message);
                                             this.handleEvent(message, system);
                                         })
                             .then(() => {
