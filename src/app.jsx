@@ -126,6 +126,21 @@ class Application extends React.Component {
         });
     }
 
+    // updateContainerStatsPodman(system) {
+    //     client.getContainerStats(system, reply => {
+    //         if (reply.Error != null) // executed when container stop
+    //             console.warn("Failed to update container stats:", JSON.stringify(reply.message));
+    //         else {
+    //             reply.Stats.forEach(stat => this.updateState("containersStats", stat.ContainerID + system.toString(), stat));
+    //         }
+    //     }).catch(ex => {
+    //         if (ex.cause == "no support for CGroups V1 in rootless environments" || ex.cause == "Container stats resource only available for cgroup v2") {
+    //             console.log("This OS does not support CgroupsV2. Some information may be missing.");
+    //         } else
+    //             console.warn("Failed to update container stats:", JSON.stringify(ex.message));
+    //     });
+    // }
+
     updateContainerStats(system) {
         client.getContainerStats(system, reply => {
             if (reply.Error != null) // executed when container stop
@@ -381,6 +396,10 @@ class Application extends React.Component {
         case 'commit':
             this.updateImagesAfterEvent(system);
             break;
+        /* docker event types */
+        case 'exec_die':
+        case event.Action.match(/^exec_start:/)?.input:
+        case event.Action.match(/^exec_create:/)?.input:
         default:
             console.warn('Unhandled event type ', event.Type, event.Action);
         }
