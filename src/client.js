@@ -98,10 +98,18 @@ export function getDockerContainerStats(system, callback) {
     const process = cockpit.spawn(["docker", "stats", "--no-trunc", "--format", "'{{json .}}'"]);
     return new Promise((resolve, reject) => {
         process.stream(data => {
-            const arr = data.split(/\r?\n/).map(str => str.substring(str.indexOf("{"), str.indexOf("}") + 1));
+            const statObj = {
+                "Stats": data
+                .split(/\r?\n/)
+                .map(str => {
+                    const obj = Json.parse(str.substring(str.indexOf("{"), str.indexOf("}") + 1));
+                    obj.ContainerID = obj.ID;
+                    return obj;
+                })
+            };
             console.log("streaming...");
-            console.log(arr);
-            // callback(arr);
+            console.log(statObj);
+            callback(obj);
             return data.length;
         })
                 .catch((error, content) => {
