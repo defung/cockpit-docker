@@ -102,6 +102,7 @@ export function getDockerContainerStats(system, callback) {
             console.log("streaming...");
             console.log(arr);
             callback(JSON.parse(data));
+            return data.length;
         })
                 .catch((error, content) => {
                     manage_error(reject, error, content);
