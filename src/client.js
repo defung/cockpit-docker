@@ -104,9 +104,14 @@ export function getDockerContainerStats(system, callback) {
                         .map(str => {
                             const jsonStr = str.substring(str.indexOf("{"), str.lastIndexOf("}") + 1);
                             console.log(jsonStr);
-                            const obj = JSON.parse(jsonStr);
-                            obj.ContainerID = obj.ID;
-                            return obj;
+                            try {
+                                const obj = JSON.parse(jsonStr);
+                                obj.ContainerID = obj.ID;
+                                return obj;
+                            } catch (error) {
+                                console.log("ERROR: '" + jsonStr + "'");
+                                return {};
+                            }
                         })
             };
             console.log("streaming...");
