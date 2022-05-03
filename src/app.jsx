@@ -178,8 +178,6 @@ class Application extends React.Component {
         client.getContainers(system)
                 .then(reply => Promise.all(
                     (reply || []).map(container => {
-                        console.log("DF container");
-                        console.log(container);
                         return this.isContainerCheckpointPresent(container.Id, system)
                                 .then(checkpointPresent => {
                                     const newContainer = Object.assign({}, container);
@@ -189,8 +187,6 @@ class Application extends React.Component {
                     })
                 ))
                 .then(reply => {
-                    console.log("DF container 2");
-                    console.log(reply);
                     this.setState(prevState => {
                         // Copy only containers that could not be deleted with this event
                         // So when event from system come, only copy user containers and vice versa
@@ -477,8 +473,6 @@ class Application extends React.Component {
                                 this.cleanupAfterService(system);
                             })
                             .catch(e => {
-                                console.log("DFe - streamEvents error");
-                                console.log(e);
                                 this.setState({ [system ? "systemServiceAvailable" : "userServiceAvailable"]: false });
                                 this.cleanupAfterService(system);
                             });
