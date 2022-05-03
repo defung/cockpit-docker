@@ -95,11 +95,12 @@ function manage_error(reject, error, content) {
 }
 
 export function getDockerContainerStats(system, callback) {
-    const process = cockpit.spawn(["docker", "stats", "--format", "'{{json .}}'"]);
+    const process = cockpit.spawn(["docker", "stats", "--no-trunc", "--format", "'{{json .}}'"]);
     return new Promise((resolve, reject) => {
         process.stream(data => {
+            const arr = data.split(/\r?\n/);
             console.log("streaming...");
-            console.log(data);
+            console.log(arr);
             callback(JSON.parse(data));
         })
                 .catch((error, content) => {
