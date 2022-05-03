@@ -101,15 +101,15 @@ export function getDockerContainerStats(system, callback) {
             const statObj = {
                 Stats: data
                         .split(/\r?\n/)
+                        .map(str => str.substring(str.indexOf("{"), str.lastIndexOf("}") + 1))
+                        .filter(str => str.length > 0)
                         .map(str => {
-                            const jsonStr = str.substring(str.indexOf("{"), str.lastIndexOf("}") + 1);
-                            console.log(jsonStr);
                             try {
-                                const obj = JSON.parse(jsonStr);
+                                const obj = JSON.parse(str);
                                 obj.ContainerID = obj.ID;
                                 return obj;
                             } catch (error) {
-                                console.log("ERROR: '" + jsonStr + "'");
+                                console.log("ERROR: '" + str + "'");
                                 return {};
                             }
                         })
