@@ -153,8 +153,8 @@ class Application extends React.Component {
                             const system_cpu_delta = reply.cpu_stats.system_cpu_usage - reply.precpu_stats.system_cpu_usage;
                             const num_cpus = reply.cpu_stats.online_cpus;
 
-                            const used_memory = reply.memory_stats ? reply.memory_stats.usage - reply.memory_stats.stats.cache : 0;
-                            const available_memory = reply.memory_stats ? reply.memory_stats.limit : 0;
+                            const used_memory = Object.keys(reply.memory_stats).length === 0 ? 0 : reply.memory_stats.usage - reply.memory_stats.stats.cache;
+                            const available_memory = Object.keys(reply.memory_stats).length === 0 ? 0 : reply.memory_stats.limit;
 
                             const stats = {
                                 CPU: (cpu_delta / system_cpu_delta) * num_cpus * 100.0,
