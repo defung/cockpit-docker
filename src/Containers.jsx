@@ -349,9 +349,10 @@ class Containers extends React.Component {
     }
 
     renderRow(containersStats, container, containerDetail, localImages) {
+        console.log("DF - renderRow");
         const containerStats = containersStats[container.Id + container.isSystem.toString()];
         const image = container.Image;
-
+        console.log(containerStats);
         let proc = "";
         let mem = "";
         if (this.props.cgroupVersion == 'v1' && !container.isSystem && container.State == 'running') {
@@ -364,6 +365,7 @@ class Containers extends React.Component {
             if (containerStats.MemUsage != undefined && containerStats.MemLimit != undefined)
                 mem = utils.format_memory_and_limit(containerStats.MemUsage, containerStats.MemLimit);
         }
+        console.log("DF - proc='" + proc + "', mem='" + mem + "'");
         const info_block =
             <div className="container-block">
                 <span className="container-name">{container.Names}</span>
