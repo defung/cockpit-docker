@@ -101,7 +101,7 @@ export function getDockerContainerStats(system, callback) {
             const arr = data.split(/\r?\n/).map(str => str.substring(str.indexOf("{"), str.indexOf("}") + 1));
             console.log("streaming...");
             console.log(arr);
-            callback(JSON.parse(data));
+            // callback(arr);
             return data.length;
         })
                 .catch((error, content) => {
