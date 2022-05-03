@@ -98,7 +98,7 @@ export function getDockerContainerStats(system, callback) {
     const process = cockpit.spawn(["docker", "stats", "--no-trunc", "--format", "'{{json .}}'"]);
     return new Promise((resolve, reject) => {
         process.stream(data => {
-            const arr = data.split(/\r?\n/);
+            const arr = data.split(/\r?\n/).map(str => str.substring(str.indexOf("{"), str.indexOf("}") + 1));
             console.log("streaming...");
             console.log(arr);
             callback(JSON.parse(data));
