@@ -154,12 +154,12 @@ class Application extends React.Component {
 
                 const used_memory = reply.memory_stats.usage - reply.memory_stats.stats.cache;
                 const available_memory = reply.memory_stats.limit;
-                
+
                 const stats = {
                     CPU: (cpu_delta / system_cpu_delta) * num_cpus * 100.0,
                     MemUsage: (used_memory / available_memory) * 100.0,
                     MemLimit: available_memory
-                }
+                };
                 this.updateState("containersStats", id + system.toString(), stats);
             }
         }).catch(ex => {
