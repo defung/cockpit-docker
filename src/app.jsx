@@ -256,33 +256,6 @@ class Application extends React.Component {
                 });
     }
 
-    updatePodsAfterEvent(system) {
-        client.getPods(system)
-                .then(reply => {
-                    this.setState(prevState => {
-                        // Copy only pods that could not be deleted with this event
-                        // So when event from system come, only copy user pods and vice versa
-                        const copyPods = {};
-                        Object.entries(prevState.pods || {}).forEach(([id, pod]) => {
-                            if (pod.isSystem !== system)
-                                copyPods[id] = pod;
-                        });
-                        for (const pod of reply || []) {
-                            pod.isSystem = system;
-                            copyPods[pod.Id + system.toString()] = pod;
-                        }
-
-                        return {
-                            pods: copyPods,
-                            [system ? "systemPodsLoaded" : "userPodsLoaded"]: true,
-                        };
-                    });
-                })
-                .catch(ex => {
-                    console.warn("Failed to do Update Pods:", JSON.stringify(ex));
-                });
-    }
-
     updateContainerAfterEvent(id, system) {
         client.getContainers(system, id)
                 .then(reply => Promise.all(
@@ -381,7 +354,6 @@ class Application extends React.Component {
         case 'start':
             // HACK: We don't get 'started' event for pods got started by the first container which was added to them
             // https://github.com/containers/podman/issues/7213
-            this.updatePodsAfterEvent(system);
             this.updateContainerAfterEvent(event.Actor.ID, system);
             break;
         case 'checkpoint':
@@ -426,10 +398,8 @@ class Application extends React.Component {
         case 'start':
         case 'stop':
         case 'unpause':
-            this.updatePodAfterEvent(event.Actor.ID, system);
             break;
         case 'remove':
-            this.updatePodsAfterEvent(system);
             break;
         default:
             console.warn('Unhandled event type ', event.Type, event.Action);
@@ -477,7 +447,6 @@ class Application extends React.Component {
                     });
                     this.updateImagesAfterEvent(system);
                     this.updateContainersAfterEvent(system, true);
-                    this.updatePodsAfterEvent(system);
                     client.streamEvents(system,
                                         message => {
                                             this.handleEvent(message, system);
