@@ -436,7 +436,7 @@ class Containers extends React.Component {
 
         let emptyCaption = _("No containers");
         const emptyCaptionPod = _("No containers in this pod");
-        if (this.props.containers === null || this.props.pods === null)
+        if (this.props.containers === null)
             emptyCaption = _("Loading...");
         else if (this.props.textFilter.length > 0)
             emptyCaption = _("No containers that match the current filter");
