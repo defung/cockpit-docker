@@ -570,7 +570,7 @@ class Containers extends React.Component {
                 </CardHeader>
                 <CardBody>
                     <Flex direction={{ default: 'column' }}>
-                        {(this.props.containers === null || this.props.pods === null)
+                        {(this.props.containers === null)
                             ? <ListingTable variant='compact'
                                             aria-label={_("Containers")}
                                             emptyCaption={emptyCaption}
