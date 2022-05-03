@@ -142,35 +142,34 @@ class Application extends React.Component {
     // }
 
     updateContainerStats(system) {
-        Object
-            .keys(this.state.containers)
-            .map(str => str.slice(0, -5))
-            .forEach(id => {
-                client.getDockerContainerStats(system, id, reply => {
-                    if (reply.Error != null) // executed when container stop
-                        console.warn("Failed to update container stats:", JSON.stringify(reply.message));
-                    else {
-                        const cpu_delta = reply.cpu_stats.cpu_usage.total_usage - reply.precpu_stats.cpu_usage.total_usage;
-                        const system_cpu_delta = reply.cpu_stats.system_cpu_usage - reply.precpu_stats.system_cpu_usage;
-                        const num_cpus = reply.cpu_stats.online_cpus;
-
-                        const used_memory = reply.memory_stats.usage - reply.memory_stats.stats.cache;
-                        const available_memory = reply.memory_stats.limit;
-
-                        const stats = {
-                            CPU: (cpu_delta / system_cpu_delta) * num_cpus * 100.0,
-                            MemUsage: (used_memory / available_memory) * 100.0,
-                            MemLimit: available_memory
-                        };
-                        this.updateState("containersStats", id + system.toString(), stats);
-                    }
-                }).catch(ex => {
-                    if (ex.cause == "no support for CGroups V1 in rootless environments" || ex.cause == "Container stats resource only available for cgroup v2") {
-                        console.log("This OS does not support CgroupsV2. Some information may be missing.");
-                    } else
-                        console.warn("Failed to update container stats:", JSON.stringify(ex.message));
+        Object.keys(this.state.containers)
+                .map(str => str.slice(0, -5))
+                .forEach(id => {
+                    client.getDockerContainerStats(system, id, reply => {
+                        if (reply.Error != null) // executed when container stop
+                            console.warn("Failed to update container stats:", JSON.stringify(reply.message));
+                        else {
+                            const cpu_delta = reply.cpu_stats.cpu_usage.total_usage - reply.precpu_stats.cpu_usage.total_usage;
+                            const system_cpu_delta = reply.cpu_stats.system_cpu_usage - reply.precpu_stats.system_cpu_usage;
+                            const num_cpus = reply.cpu_stats.online_cpus;
+    
+                            const used_memory = reply.memory_stats.usage - reply.memory_stats.stats.cache;
+                            const available_memory = reply.memory_stats.limit;
+    
+                            const stats = {
+                                CPU: (cpu_delta / system_cpu_delta) * num_cpus * 100.0,
+                                MemUsage: (used_memory / available_memory) * 100.0,
+                                MemLimit: available_memory
+                            };
+                            this.updateState("containersStats", id + system.toString(), stats);
+                        }
+                    }).catch(ex => {
+                        if (ex.cause == "no support for CGroups V1 in rootless environments" || ex.cause == "Container stats resource only available for cgroup v2") {
+                            console.log("This OS does not support CgroupsV2. Some information may be missing.");
+                        } else
+                            console.warn("Failed to update container stats:", JSON.stringify(ex.message));
+                    });
                 });
-            });
     }
 
     inspectContainerDetail(id, system) {
