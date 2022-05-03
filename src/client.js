@@ -109,7 +109,7 @@ export function getDockerContainerStats(system, callback) {
             };
             console.log("streaming...");
             console.log(statObj);
-            callback(obj);
+            callback(statObj);
             return data.length;
         })
                 .catch((error, content) => {
