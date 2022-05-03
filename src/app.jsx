@@ -146,6 +146,7 @@ class Application extends React.Component {
             if (reply.Error != null) // executed when container stop
                 console.warn("Failed to update container stats:", JSON.stringify(reply.message));
             else {
+                console.log("DF - stats updating state");
                 reply.Stats.forEach(stat => this.updateState("containersStats", stat.ContainerID + system.toString(), stat));
             }
         }).catch(ex => {
