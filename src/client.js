@@ -118,7 +118,10 @@ export function getDockerContainerStats(system, callback) {
             console.log(statObj);
             try {
                 callback(statObj);
-            } finally {
+                return data.length;
+            } catch (error) {
+                console.log("DF - exception callback: ");
+                console.log(error);
                 return data.length;
             }
         })
