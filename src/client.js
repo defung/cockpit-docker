@@ -99,13 +99,13 @@ export function getDockerContainerStats(system, callback) {
     return new Promise((resolve, reject) => {
         process.stream(data => {
             const statObj = {
-                "Stats": data
-                .split(/\r?\n/)
-                .map(str => {
-                    const obj = Json.parse(str.substring(str.indexOf("{"), str.indexOf("}") + 1));
-                    obj.ContainerID = obj.ID;
-                    return obj;
-                })
+                Stats: data
+                        .split(/\r?\n/)
+                        .map(str => {
+                            const obj = JSON.parse(str.substring(str.indexOf("{"), str.indexOf("}") + 1));
+                            obj.ContainerID = obj.ID;
+                            return obj;
+                        })
             };
             console.log("streaming...");
             console.log(statObj);
