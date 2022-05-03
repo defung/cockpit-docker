@@ -423,6 +423,8 @@ class Containers extends React.Component {
     }
 
     render() {
+        console.log("containers?");
+        console.log(this.props.containers);
         const columnTitles = [
             { title: _("Container"), transforms: [cellWidth(20)] },
             _("Owner"),
