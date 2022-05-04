@@ -67,11 +67,11 @@ export function getContainers(system, id) {
         podmanCall("containers/json", "GET", options, system)
                 .then(reply => {
                     const json = JSON.parse(reply);
-                    console.log(json);
                     json.map(j => {
-                        j.command = j.command.split(" ");
+                        j.Command = j.Command.split(" ");
                         return j;
                     });
+                    console.log(json);
                     return resolve(json);
                 })
                 .catch(reject);
