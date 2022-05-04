@@ -92,8 +92,8 @@ const ContainerDetails = ({ container, containerDetail }) => {
                         <DescriptionListDescription>{utils.localize_time(Date.parse(container.Created) / 1000)}</DescriptionListDescription>
                     </DescriptionListGroup>
                     <DescriptionListGroup>
-                        <DescriptionListTerm>{_("State")}</DescriptionListTerm>
-                        <DescriptionListDescription>{render_container_state(container)}</DescriptionListDescription>
+                        <DescriptionListTerm>{_("Status")}</DescriptionListTerm>
+                        <DescriptionListDescription>{container.Status}</DescriptionListDescription>
                     </DescriptionListGroup>
                 </DescriptionList>
             </FlexItem>
