@@ -68,6 +68,7 @@ export function getContainers(system, id) {
                 .then(reply => {
                     const json = JSON.parse(reply);
                     json.map(j => {
+                        j.Created = new Date(j.Created * 1000).toISOString();
                         j.Command = j.Command.split(" ");
                         return j;
                     });
