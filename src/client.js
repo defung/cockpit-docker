@@ -67,6 +67,7 @@ export function getContainers(system, id) {
         podmanCall("containers/json", "GET", options, system)
                 .then(reply => {
                     const json = JSON.parse(reply);
+                    console.log(json);
                     json.Command = json.Command.split(' ');
                     return resolve(json);
                 })
