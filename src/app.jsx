@@ -332,18 +332,7 @@ class Application extends React.Component {
     }
 
     updatePodAfterEvent(id, system) {
-        client.getPods(system, id)
-                .then(reply => {
-                    if (reply && reply.length > 0) {
-                        reply = reply[0];
-
-                        reply.isSystem = system;
-                        this.updateState("pods", reply.Id + system.toString(), reply);
-                    }
-                })
-                .catch(ex => {
-                    console.warn("Failed to do Update Pod:", JSON.stringify(ex));
-                });
+        this.updateState("pods", "someId", {});
     }
 
     handleImageEvent(event, system) {
