@@ -6,13 +6,6 @@ import { DescriptionList, DescriptionListTerm, DescriptionListDescription, Descr
 
 const _ = cockpit.gettext;
 
-const render_container_state = (container) => {
-    if (container.State === "running") {
-        return cockpit.format(_("Up since $0"), utils.localize_time(container.StartedAt));
-    }
-    return cockpit.format(_("Exited"));
-};
-
 const render_container_published_ports = (ports) => {
     if (!ports)
         return null;
