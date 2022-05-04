@@ -260,7 +260,7 @@ class Application extends React.Component {
 
     updatePodsAfterEvent(system) {
         this.setState(prevState => {
-            return { pods: {}, systemPodsLoaded: true, userPodsLoaded: true }
+            return { pods: {}, systemPodsLoaded: true, userPodsLoaded: true };
         });
     }
 
@@ -312,7 +312,7 @@ class Application extends React.Component {
 
     updatePodAfterEvent(id, system) {
         this.setState(prevState => {
-            return { pods: {}, systemPodsLoaded: true, userPodsLoaded: true }
+            return { pods: {}, systemPodsLoaded: true, userPodsLoaded: true };
         });
     }
 
