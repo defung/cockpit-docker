@@ -61,7 +61,7 @@ const ContainerDetails = ({ container, containerDetail }) => {
                     </DescriptionListGroup>
                     <DescriptionListGroup>
                         <DescriptionListTerm>{_("Command")}</DescriptionListTerm>
-                        <DescriptionListDescription>{container.Command ? utils.quote_cmdline(container.Command) : ""}</DescriptionListDescription>
+                        <DescriptionListDescription>{container.Command}</DescriptionListDescription>
                     </DescriptionListGroup>
                 </DescriptionList>
             </FlexItem>
@@ -89,7 +89,7 @@ const ContainerDetails = ({ container, containerDetail }) => {
                 <DescriptionList className='container-details-state'>
                     <DescriptionListGroup>
                         <DescriptionListTerm>{_("Created")}</DescriptionListTerm>
-                        <DescriptionListDescription>{utils.localize_time(Date.parse(container.Created) / 1000)}</DescriptionListDescription>
+                        <DescriptionListDescription>{utils.localize_time(container.Created)}</DescriptionListDescription>
                     </DescriptionListGroup>
                     <DescriptionListGroup>
                         <DescriptionListTerm>{_("Status")}</DescriptionListTerm>
