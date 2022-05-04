@@ -259,30 +259,9 @@ class Application extends React.Component {
     }
 
     updatePodsAfterEvent(system) {
-        client.getPods(system)
-                .then(reply => {
-                    this.setState(prevState => {
-                        // Copy only pods that could not be deleted with this event
-                        // So when event from system come, only copy user pods and vice versa
-                        const copyPods = {};
-                        Object.entries(prevState.pods || {}).forEach(([id, pod]) => {
-                            if (pod.isSystem !== system)
-                                copyPods[id] = pod;
-                        });
-                        for (const pod of reply || []) {
-                            pod.isSystem = system;
-                            copyPods[pod.Id + system.toString()] = pod;
-                        }
-
-                        return {
-                            pods: copyPods,
-                            [system ? "systemPodsLoaded" : "userPodsLoaded"]: true,
-                        };
-                    });
-                })
-                .catch(ex => {
-                    console.warn("Failed to do Update Pods:", JSON.stringify(ex));
-                });
+        this.setState(prevState => {
+            return { pods: {}, systemPodsLoaded: true, userPodsLoaded: true }
+        });
     }
 
     updateContainerAfterEvent(id, system) {
@@ -332,7 +311,9 @@ class Application extends React.Component {
     }
 
     updatePodAfterEvent(id, system) {
-        this.updateState("pods", "someId", {});
+        this.setState(prevState => {
+            return { pods: {}, systemPodsLoaded: true, userPodsLoaded: true }
+        });
     }
 
     handleImageEvent(event, system) {
