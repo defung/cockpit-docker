@@ -69,7 +69,7 @@ export function getContainers(system, id) {
                     const json = JSON.parse(reply);
                     console.log(json);
                     json.map(j => {
-                        j.Command = j.Command.split(" ");
+                        j.command = j.command.split(" ");
                         return j;
                     });
                     return resolve(json);
