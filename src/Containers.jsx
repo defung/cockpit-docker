@@ -366,6 +366,7 @@ class Containers extends React.Component {
                 mem = utils.format_memory_and_limit(containerStats.MemUsage, containerStats.MemLimit);
         }
         console.log("DF - proc='" + proc + "', mem='" + mem + "'");
+        console.log("container.command = '" + container.Command + "'");
         const info_block =
             <div className="container-block">
                 <span className="container-name">{container.Names}</span>
