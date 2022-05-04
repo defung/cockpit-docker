@@ -45,6 +45,8 @@ const ContainerDetails = ({ container, containerDetail }) => {
         ].some(itm => !!itm)
     );
 
+    console.log("created = " + container.Created);
+
     return (
         <Flex>
             <FlexItem>
