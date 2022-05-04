@@ -65,7 +65,11 @@ export function getContainers(system, id) {
             options.filters = JSON.stringify({ id: [id] });
 
         podmanCall("containers/json", "GET", options, system)
-                .then(reply => resolve(JSON.parse(reply)))
+                .then(reply => {
+                    const json = JSON.parse(reply);
+                    json.Command = json.Command.split(' ');
+                    return resolve(json);
+                })
                 .catch(reject);
     });
 }
